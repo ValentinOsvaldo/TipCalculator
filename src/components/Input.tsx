@@ -17,20 +17,34 @@ interface Props {
   placeholder?: string;
   keyboardType?: KeyboardTypeOptions;
   style?: StyleProp<ViewStyle>;
+  error?: boolean;
   onChange?: (value: string) => void;
 }
 
 export const Input: React.FC<Props> = ({
-  label,
-  value,
-  leftIcon,
+  error,
   helperMessage,
   keyboardType = 'default',
+  label,
+  leftIcon,
+  onChange,
   placeholder,
   style,
-  onChange
+  value,
 }) => {
   const [isFocus, setIsFocus] = useState<boolean>(false);
+
+  const borderColor = {
+    error: 'red',
+    focus: '#26c0ab',
+  };
+
+  const getBorderColor = (): string => {
+    if (error && isFocus || error) return borderColor['error'];
+    if (isFocus) return borderColor['focus'];
+
+    return '#f4fafa';
+  };
 
   return (
     <View
@@ -41,14 +55,14 @@ export const Input: React.FC<Props> = ({
       {(label || helperMessage) && (
         <View style={styles.labelContainer}>
           <Text style={styles.label}>{label}</Text>
-          <Text>{helperMessage}</Text>
+          <Text style={styles.helperText}>{helperMessage}</Text>
         </View>
       )}
 
       <View
         style={{
           ...styles.inputContainer,
-          borderColor: isFocus ? '#26c0ab' : '#f4fafa',
+          borderColor: getBorderColor(),
         }}>
         {leftIcon}
         <TextInput
@@ -58,7 +72,7 @@ export const Input: React.FC<Props> = ({
           onBlur={() => setIsFocus(false)}
           placeholder={placeholder}
           placeholderTextColor="#7f9c9f"
-          value={ value }
+          value={value}
           onChangeText={onChange}
         />
       </View>
@@ -72,12 +86,20 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
   labelContainer: {
+    alignItems: 'center',
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
     marginBottom: 4,
   },
   label: {
     color: '#5e7a7d',
     fontFamily: 'SpaceMono-Bold',
+  },
+  helperText: {
+    color: 'red',
+    fontFamily: 'SpaceMono-Bold',
+    fontSize: 12, 
   },
   inputContainer: {
     alignItems: 'center',

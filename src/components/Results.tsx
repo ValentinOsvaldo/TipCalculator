@@ -2,7 +2,13 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Button } from './';
 
-export const Results = () => {
+interface Props {
+  tipAmount: string;
+  total: string;
+  onReset: () => void;
+}
+
+export const Results: React.FC<Props> = ({ tipAmount, total, onReset }) => {
   return (
     <View style={styles.container}>
       <View style={styles.row}>
@@ -30,7 +36,7 @@ export const Results = () => {
             fontFamily: 'SpaceMono-Bold',
             fontSize: 26,
           }}>
-          $99.99
+          ${ tipAmount }
         </Text>
       </View>
 
@@ -59,11 +65,11 @@ export const Results = () => {
             fontFamily: 'SpaceMono-Bold',
             fontSize: 26,
           }}>
-          $99.99
+          ${ total }
         </Text>
       </View>
 
-      <Button title="Reset" />
+      <Button title="Reset" onPress={onReset} />
     </View>
   );
 };
